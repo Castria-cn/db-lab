@@ -250,7 +250,7 @@ relation_info hash_join(relation_info R, relation_info S, int attr_r, int attr_s
     hashtable *R_table = build_hash(R, attr_r);
     hashtable *S_table = build_hash(S, attr_s);
 
-    initBuffer(BUFSIZE, BLKSIZE, &buffer);
+    initBuffer(BUFSIZE + 64, BLKSIZE, &buffer);
     int offset = 0;
     unsigned char *block_ptr = getNewBlockInBuffer(&buffer);
     relation_info RJS = {.start_addr = free_disk, .tuple_size = R.tuple_size + S.tuple_size};
