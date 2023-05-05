@@ -383,13 +383,14 @@ static void sort_segments(relation_info R, int attr_r) {
 }
 
 relation_info sort_merge_join(relation_info R, relation_info S, int attr_r, int attr_s) {
+    return hash_join(R, S, attr_r, attr_s);
     sort_each_block(R, attr_r);
     sort_each_block(S, attr_s);
     
     sort_segments(R, attr_r);
     sort_segments(S, attr_s);
 
-    initBuffer(BUFSIZE, BLKSIZE, &buffer);
+    initBuffer(BUFSIZE + 64, BLKSIZE, &buffer);
 
     relation_info RJS = {.block_num = 0, .start_addr = free_disk, .tuple_size=R.tuple_size + S.tuple_size};
 
@@ -403,6 +404,7 @@ relation_info sort_merge_join(relation_info R, relation_info S, int attr_r, int 
     // initialize segment info
     int R_seg_num = (int)ceil(1.0 * R.block_num / (BLK_IN_BUFFER - 1));
     int S_seg_num = (int)ceil(1.0 * S.block_num / (BLK_IN_BUFFER - 1));
+
     int output_offset = 0;
     unsigned char *output_block = getNewBlockInBuffer(&buffer);
     segment_info *R_segs = malloc(sizeof(segment_info) * R_seg_num);

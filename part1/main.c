@@ -12,7 +12,7 @@ int main() {
     show_relation(select_R, "select_R(A)");
     relation_info project_R = project(R, 0);
     show_relation(project_R, "project_R(A)");
-    relation_info RJS = hash_join(R, S, 0, 0);
+    relation_info RJS = sort_merge_join(R, S, 0, 0);
     show_relation(RJS, "R.A JOIN S.C(A, B, C, D)");
     return 0;
 }
